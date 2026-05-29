@@ -12,6 +12,33 @@ class Ultis {
     'Fri',
     'Sat',
   ];
+  String removeVietnameseDiacritics(String input) {
+    const withDiacritics =
+        'àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễ'
+        'ìíịỉĩòóọỏõôồốộổỗơờớợởỡ'
+        'ùúụủũưừứựửữỳýỵỷỹđ'
+        'ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄ'
+        'ÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ'
+        'ÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ';
+    const withoutDiacritics =
+        'aaaaaaaaaaaaaaaaaeeeeeeeeeee'
+        'iiiii'
+        'ooooooooooooooooo'
+        'uuuuuuuuuuu'
+        'yyyyd'
+        'AAAAAAAAAAAAAAAAAEEEEEEEEEEE'
+        'IIIII'
+        'OOOOOOOOOOOOOOOOO'
+        'UUUUUUUUUUU'
+        'YYYYD';
+
+    final buffer = StringBuffer();
+    for (final ch in input.split('')) {
+      final index = withDiacritics.indexOf(ch);
+      buffer.write(index >= 0 ? withoutDiacritics[index] : ch);
+    }
+    return buffer.toString();
+  }
 
   //lấy danh sách ngày của tháng hiện tại
   static List<Map<String, String>> getDaysOfCurrentMonth(DateTime? date) {

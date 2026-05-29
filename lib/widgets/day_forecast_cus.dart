@@ -1,7 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class DayForecastItem {
+  final DateTime date;
+  final double minTemp;
+  final double maxTemp;
+  final String main;
+
+  DayForecastItem({
+    required this.date,
+    required this.minTemp,
+    required this.maxTemp,
+    required this.main,
+  });
+}
 
 class DayForeCast extends StatelessWidget {
-  const DayForeCast({super.key});
+  final List<DayForecastItem> items;
+
+  const DayForeCast({super.key, required this.items});
+
+  IconData _iconForMain(String main) {
+    switch (main.toLowerCase()) {
+      case 'rain':
+        return Icons.cloud_rounded;
+      case 'clouds':
+        return Icons.cloud_rounded;
+      case 'clear':
+        return Icons.sunny;
+      default:
+        return Icons.cloud_rounded;
+    }
+  }
+
+  double _toCelsius(double kelvin) {
+    return kelvin - 273.15;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,39 +61,46 @@ class DayForeCast extends StatelessWidget {
                 ),
               ),
 
-              ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Thứ ${index + 2}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+              items.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: 12),
+                      child: Text(
+                        'No daily data',
+                        style: TextStyle(color: Colors.white),
                       ),
-                      const Icon(
-                        Icons.cloud_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      Text(
-                        '${25 + index}°C',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 12),
-                itemCount: 7,
-              ),
+                    )
+                  : ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final item = items[index];
+                        final label = DateFormat('EEE').format(item.date);
+                        final icon = _iconForMain(item.main);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Icon(icon, color: Colors.white, size: 20),
+                            Text(
+                              '${_toCelsius(item.minTemp).round()}° / ${_toCelsius(item.maxTemp).round()}°',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
+                      itemCount: items.length,
+                    ),
             ],
           ),
         ),

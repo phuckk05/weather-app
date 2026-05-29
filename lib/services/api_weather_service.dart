@@ -10,11 +10,11 @@ class ApiWeatherService {
   final forecastPath = dotenv.env['FORECAST_PATH'];
   String get url => 'https://$host$forecastPath$apiKey';
 
-  Future<WeatherForecastModel> getWeatherData() async {
-    final response = await http.get(Uri.parse(url));
+  Stream<WeatherForecastModel> getWeatherData(String city) async* {
+    final response = await http.get(Uri.parse(url + '&q=$city'));
 
     if (response.statusCode == 200) {
-      return WeatherForecastModel.fromJson(jsonDecode(response.body));
+      yield WeatherForecastModel.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load weather data');
     }

@@ -29,15 +29,15 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-enum WeatherTheme { sun, rain, normal }
+enum WeatherTheme { rain, clear, cloudy }
 
 ThemeData _themeFromMode(WeatherTheme mode) {
   switch (mode) {
-    case WeatherTheme.sun:
+    case WeatherTheme.clear:
       return ThemeApp.sunTheme;
     case WeatherTheme.rain:
       return ThemeApp.rainTheme;
-    case WeatherTheme.normal:
+    case WeatherTheme.cloudy:
       return ThemeApp.normalTheme;
   }
 }
