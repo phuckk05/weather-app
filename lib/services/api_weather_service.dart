@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/models/weather.dart';
 
 class ApiWeatherService {
   final apiKey = dotenv.env['API_KEY'];
@@ -7,13 +10,13 @@ class ApiWeatherService {
   final forecastPath = dotenv.env['FORECAST_PATH'];
   String get url => 'https://$host$forecastPath$apiKey';
 
-  Future<void> getWeatherData() async {
+  Future<WeatherForecastModel> getWeatherData() async {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      print('Weather data: ${response.body}');
+      return WeatherForecastModel.fromJson(jsonDecode(response.body));
     } else {
-      print('Failed to load weather data. Status code: ${response.statusCode}');
+      throw Exception('Failed to load weather data');
     }
   }
 }

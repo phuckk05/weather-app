@@ -11,7 +11,7 @@ class HourlyForeCast extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.black87.withOpacity(0.8),
+            color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10),
           ),
           height: 130,
@@ -37,7 +37,9 @@ class HourlyForeCast extends StatelessWidget {
                     return Container(
                       width: 70,
                       decoration: BoxDecoration(
-                        color: Colors.black87.withOpacity(0.5),
+                        color: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
